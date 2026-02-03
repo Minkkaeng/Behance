@@ -344,21 +344,20 @@
   color: var(--text-sub);
 }
 
-/* ============= PROJECTS (✅ 3열 + 작게 + 가운데 촘촘) ============= */
 .section-projects {
   background: var(--bg-soft);
 }
 
 .projects-inner {
-  padding: 34px 0 90px; /* ✅ 아래 여백 늘려서 잘림 방지 */
+  padding: 34px 0 90px;
 }
 
 .projects-grid {
-  width: min(860px, 100%); /* ✅ 그리드 덩어리로 중앙 모이게 */
+  width: min(860px, 100%);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* ✅ 3열 유지 */
-  gap: 12px; /* ✅ 촘촘 */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .project-card {
@@ -386,16 +385,15 @@
 }
 
 .project-card:hover .project-logo-card {
-  transform: translateY(-2px); /* ✅ 덜 튀게 */
+  transform: translateY(-2px);
   border-color: var(--border-strong);
   box-shadow: var(--shadow-strong);
 }
 
-/* ✅ 카드가 커지던 원인: 썸네일 박스 높이 확 줄이기 */
 .project-logo-big-wrap {
   width: 100%;
-  aspect-ratio: 2.6 / 1; /* ✅ 얇게 */
-  max-height: 120px; /* ✅ 화면 커도 제한 */
+  aspect-ratio: 2.6 / 1;
+  max-height: 120px;
   border-radius: 12px;
   background: color-mix(in oklab, var(--surface-soft) 86%, transparent);
   display: flex;
