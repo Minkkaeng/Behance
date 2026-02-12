@@ -1,4 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-text: var(--text);
+  --color-text-sub: var(--text-sub);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --radius-xl: var(--radius-xl);
+  --radius-lg: var(--radius-lg);
+  --radius-md: var(--radius-md);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-strong: var(--shadow-strong);
+}
+
 :root {
+  --header-h: 80px;
   --bg: #f4f5fb;
   --bg-soft: #e7ebff;
   --surface: #ffffff;
@@ -25,7 +48,7 @@
     radial-gradient(circle at 100% 100%, #dde7ff 0, transparent 55%), linear-gradient(180deg, #f4f5fb 0%, #ebefff 100%);
 }
 
-:root[data-theme="dark"] {
+:root.dark {
   --bg: #050712;
   --bg-soft: #0b0f21;
   --surface: #14182a;
@@ -49,137 +72,76 @@
     linear-gradient(180deg, #050712 0%, #080a16 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-  }
-}
-
-*,
-*::before,
-*::after {
+/* Base Styles */
+* {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,
+*:focus {
+  outline: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow: hidden;
+  user-select: none;
+}
+
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
   font-family:
-    "Montserrat",
+    "Inter",
     system-ui,
     -apple-system,
     sans-serif;
   background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-  scroll-padding-top: 72px;
-}
-
-body {
   background-image: var(--g-hero);
+  color: var(--text);
+  overflow: hidden;
+  cursor: default;
 }
 
-main {
-  min-height: 100vh;
+#root {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-top: var(--header-h);
+  scroll-behavior: smooth;
 }
 
-.section {
-  width: 100%;
-  min-height: calc(100vh - 72px);
-  padding: 72px 24px 40px;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
+section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
-}
-
-.section-inner {
+  height: calc(100vh - var(--header-h));
   width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
-.section-header {
-  text-align: left;
-  margin-bottom: 24px;
-}
-
-.section-header h2 {
-  font-size: 32px;
-  margin: 4px 0 0;
-}
-
-.eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-sub);
-}
-
-/* 공통 버튼 */
-.btn-primary,
-.btn-ghost {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 0 20px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 0;
-  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 24px;
+  cursor: default;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), #ff8ed2);
-  color: #141118;
-  box-shadow: var(--shadow-strong);
-}
-
-.btn-ghost {
-  background: color-mix(in oklab, var(--surface) 90%, transparent);
-  color: var(--text);
-  border: 1px solid var(--border-subtle);
-}
-
-/* 공통 태그 */
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 11px;
-  border: 1px solid var(--border-subtle);
-  background: var(--surface-soft);
-  color: var(--text-sub);
-}
-
-/* footer */
-.footer {
-  padding: 18px 16px 26px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-sub);
-}
-
-/* responsive */
-@media (max-width: 768px) {
-  .section {
-    padding: 72px 18px 32px;
+/* Ensure sections are big enough on small screens */
+@media (max-height: 600px) {
+  section {
+    height: auto;
+    min-height: calc(100vh - var(--header-h));
   }
+}
 
-  .section-header h2 {
-    font-size: 26px;
-  }
+/* Hide scrollbar for Chrome, Safari and Opera */
+#root::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#root {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
