@@ -7,7 +7,7 @@ function Hero() {
       <div className="hero-text-column">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <span className="hero-badge">
-            Frontend Developer & UI/UX Designer
+            28살 프론트엔드 개발자
           </span>
         </motion.div>
 

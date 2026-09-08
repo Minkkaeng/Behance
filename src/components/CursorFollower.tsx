@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import { Heart } from "lucide-react";
 
 function CursorFollower() {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,10 +7,13 @@ function CursorFollower() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth follow effect
-  const springConfig = { damping: 25, stiffness: 150 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  // 안쪽 닷(점)은 더 빠르게 따라옴
+  const dotX = useSpring(mouseX, { damping: 30, stiffness: 400 });
+  const dotY = useSpring(mouseY, { damping: 30, stiffness: 400 });
+
+  // 바깥쪽 링(원)은 조금 더 느리게(스무스하게) 따라옴
+  const ringX = useSpring(mouseX, { damping: 25, stiffness: 150 });
+  const ringY = useSpring(mouseY, { damping: 25, stiffness: 150 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -37,24 +39,37 @@ function CursorFollower() {
   if (!isVisible) return null;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 z-[9999] pointer-events-none mix-blend-difference"
-      style={{
-        x: cursorX,
-        y: cursorY,
-        translateX: "-50%",
-        translateY: "-50%",
-        willChange: "transform",
-      }}
-    >
+    <>
+      {/* 바깥쪽 링 */}
       <motion.div
-        className="filter drop-shadow-[0_0_12px_rgba(135,206,235,0.9)]"
+        className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full border border-accent mix-blend-difference"
+        style={{
+          width: 32,
+          height: 32,
+          x: ringX,
+          y: ringY,
+          translateX: "-50%",
+          translateY: "-50%",
+          willChange: "transform",
+        }}
         animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      >
-        <Heart size={26} fill="#87CEEB" color="#87CEEB" />
-      </motion.div>
-    </motion.div>
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      />
+      
+      {/* 안쪽 닷 */}
+      <motion.div
+        className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full bg-accent mix-blend-difference"
+        style={{
+          width: 8,
+          height: 8,
+          x: dotX,
+          y: dotY,
+          translateX: "-50%",
+          translateY: "-50%",
+          willChange: "transform",
+        }}
+      />
+    </>
   );
 }
 
