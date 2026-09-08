@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type HeaderProps = {
@@ -9,6 +9,7 @@ type HeaderProps = {
 
 function Header({ theme, onToggleTheme }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -17,9 +18,12 @@ function Header({ theme, onToggleTheme }: HeaderProps) {
   }, []);
 
   const handleNavClick = (id: string) => {
+    setIsMobileMenuOpen(false);
     const el = document.getElementById(id);
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   };
 
   const navItems = [
@@ -33,8 +37,8 @@ function Header({ theme, onToggleTheme }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "py-4 bg-surface/80 backdrop-blur-md shadow-soft border-b border-border-subtle"
+        scrolled || isMobileMenuOpen
+          ? "py-4 bg-surface/90 backdrop-blur-md shadow-soft border-b border-border-subtle"
           : "py-6 bg-transparent"
       }`}
     >
@@ -43,12 +47,13 @@ function Header({ theme, onToggleTheme }: HeaderProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           type="button"
-          className="header-logo"
+          className="header-logo relative z-[60]"
           onClick={() => handleNavClick("hero")}
         >
           MK <span className="header-logo-accent">Portfolio</span>
         </motion.button>
 
+        {/* Desktop Nav */}
         <nav className="header-nav">
           {navItems.map((item) => (
             <button
@@ -62,7 +67,7 @@ function Header({ theme, onToggleTheme }: HeaderProps) {
           ))}
         </nav>
 
-        <div className="header-action-area">
+        <div className="header-action-area relative z-[60]">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -83,8 +88,41 @@ function Header({ theme, onToggleTheme }: HeaderProps) {
               </motion.div>
             </AnimatePresence>
           </motion.button>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden p-2 rounded-full bg-surface-soft border border-border-subtle text-text hover:border-accent transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Nav Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 w-full bg-surface border-b border-border-subtle shadow-strong md:hidden flex flex-col p-6 gap-4"
+          >
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleNavClick(item.id)}
+                className="text-left text-lg font-bold text-text hover:text-accent transition-colors py-2 border-b border-border-subtle/50 last:border-0"
+              >
+                {item.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
